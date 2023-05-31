@@ -16,7 +16,6 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
   );
   
   select = select && select.replaceAll(',', ' ');
-  console.log(select);
   sort = sort ? sort.replace(/,/g, ' ') : '-createdAt';
   
   //pagination
@@ -29,6 +28,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 
   const bootcamps = await Bootcamp
                       .find(query, select)
+                      .populate('courses')
                       .sort(sort)
                       .limit(limit)
                       .skip(startIndex);
@@ -59,7 +59,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.getBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.findById(req.params.id);
-
+  console.log("testing");
   if(!bootcamp) {
     return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
   } else {
@@ -104,17 +104,15 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @route delete /api/v1/bootcamps/:id
 // @access Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+  const bootcamp = await Bootcamp.findById(req.params.id);
 
   if(!bootcamp) {
-    res
-      .status(400)
-      .json({ success: false, body: "Could not delete" });
-  } else {
-      res
-        .status(200)
-        .json({ success: true, body: {} });
+    return next(new ErrorResponse(`Bootcamp id: ${req.params.id} not found.`, 404));
   }
+
+  bootcamp.deleteOne();
+
+  res.status(200).json({ successe: true, data: {} });
 });
 
 // @desc Get bootcamps within a radius

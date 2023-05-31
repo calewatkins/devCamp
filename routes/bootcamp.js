@@ -13,12 +13,12 @@ router
   .get(getBootcampsInRadius);
 
 router
-  .route('/bootcamps')
+  .route('/')
   .get(getBootcamps)
   .post(createBootcamp);
 
 router
-  .route('/bootcamps/:id')
+  .route('/:id')
   .get(getBootcamp)
   .put(updateBootcamp)
   .delete(deleteBootcamp);

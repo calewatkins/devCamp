@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const router = require("./routes/index");
+//const router = require("./routes/index");
+const bootcampRouter = require('./routes/bootcamp');
+const courseRouter = require('./routes/courses');
 const morgan = require("morgan");
 const connectDB = require('./config/db');
 const colors = require('colors');
@@ -24,7 +26,8 @@ app.use(express.json());
 //}
 
 //mount routers
-app.use("/api/v1", router);
+app.use("/api/v1/bootcamps", bootcampRouter);
+app.use("/api/v1/courses", courseRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
