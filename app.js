@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 //const router = require("./routes/index");
 const bootcampRouter = require('./routes/bootcamp');
 const courseRouter = require('./routes/courses');
+const authRouter = require('./routes/auth');
 const morgan = require("morgan");
 const connectDB = require('./config/db');
 const colors = require('colors');
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //mount routers
 app.use("/api/v1/bootcamps", bootcampRouter);
 app.use("/api/v1/courses", courseRouter);
+app.use("/api/v1/auth", authRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
