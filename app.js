@@ -10,6 +10,7 @@ const colors = require('colors');
 const errorHandler = require('./middleware/error');
 const fileupload = require('express-fileupload');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 dotenv.config({path: "./config/config.env"});
 
@@ -20,6 +21,9 @@ const app = express();
 
 //Body Parser
 app.use(express.json());
+
+// cookie parser
+app.use(cookieParser());
 
 //app.use(logger);
 //dev loggingmiddleware
