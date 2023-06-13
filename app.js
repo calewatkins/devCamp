@@ -7,6 +7,13 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const reviewRouter = require('./routes/review');
 
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
+
 const morgan = require("morgan");
 const connectDB = require('./config/db');
 const colors = require('colors');
@@ -37,6 +44,28 @@ app.use(cookieParser());
 
 //file uploading
 app.use(fileupload());
+
+// sanitize data
+app.use(mongoSanitize());
+
+// set security headers
+app.use(helmet());
+
+// prevent xss attacks
+app.use(xss());
+
+// rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100
+});
+app.use(limiter);
+
+// prevent http param pollution
+app.use(hpp());
+
+// enable cors
+app.use(cors());
 
 //set static folder
 app.use(express.static(path.join(__dirname, 'public')));
